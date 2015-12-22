@@ -1,0 +1,7 @@
+CC = clang
+CFLAGS = -march=x86-64 -mtune=native -g
+LINKER = -lX11 -lXext -L/usr/X11/lib -L/usr/X11R6/lib
+OUTPUT = fullscreengrab
+
+: foreach src/*.c |> $(CC) -c %f -o %o $(CFLAGS) |> src/%B.o
+: src/*.o |> $(CC) %f -o %o $(LINKER) |> bin/$(OUTPUT)
