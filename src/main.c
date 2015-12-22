@@ -9,13 +9,19 @@
 #include "fullscreen.h"
 
 int main() {
-  Display *dpy = XOpenDisplay(NULL);
+  const char *display;
 
   while(1) {
-    fullscreencheck(dpy);
+    display = getenv("DISPLAY");
+
+    if(display != NULL) {
+      Display *dpy = XOpenDisplay(NULL);
+        if(dpy != NULL) {
+          fullscreencheck(dpy);
+          XCloseDisplay(dpy);
+        }
+    }
     sleep(10);
   }
-
-  XCloseDisplay(dpy);
   return 0;
 }

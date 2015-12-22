@@ -1,5 +1,5 @@
 CC = clang
-CFLAGS = -march=x86-64 -mtune=native -g
+CFLAGS = -march=x86-64 -mtune=native -g -DDEBUG
 LINKER = -lX11 -lXext -L/usr/X11/lib -L/usr/X11R6/lib
 OUTPUT = fullscreengrab
 
