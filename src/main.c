@@ -10,13 +10,11 @@
 
 int main() {
   const char *display;
+  Display *dpy;
 
   while(1) {
-    display = getenv("DISPLAY");
-
-    if(display != NULL) {
-      Display *dpy = XOpenDisplay(NULL);
-        if(dpy != NULL) {
+    if((display = getenv("DISPLAY"))) {
+        if((dpy = XOpenDisplay(NULL))) {
           fullscreencheck(dpy);
           XCloseDisplay(dpy);
         }

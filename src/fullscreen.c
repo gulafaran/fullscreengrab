@@ -74,7 +74,7 @@ unsigned long get_active_win(Display *dpy) {
   active = XInternAtom(dpy, "_NET_ACTIVE_WINDOW", False);
 
   if(XGetWindowProperty(dpy, root_win, active, 0, ~0, False,
-        AnyPropertyType, &real, &format, &n, &extra, &data) != Success || data == NULL) {
+        AnyPropertyType, &real, &format, &n, &extra, &data) != Success || !data) {
     return 0;
   }
 
@@ -85,19 +85,16 @@ unsigned long get_active_win(Display *dpy) {
 }
 
 int get_fullscreen(Display *dpy) {
-  unsigned long window;
-  int retval;
+  unsigned long i, num_items, bytes_after, window;
+  int actual_format,retval;
+  Atom actual_type, fullscr, state;
+  Atom *atoms;
 
-  window = get_active_win(dpy);
+  atoms = NULL;
   retval = 0;
 
-  if(!window)
+  if(!(window = get_active_win(dpy)))
     return retval;
-
-  unsigned long i, num_items, bytes_after;
-  int actual_format;
-  Atom actual_type, fullscr, state;
-  Atom *atoms = NULL;
 
   state = XInternAtom(dpy, "_NET_WM_STATE", False);
   fullscr = XInternAtom(dpy, "_NET_WM_STATE_FULLSCREEN", False);
@@ -112,7 +109,7 @@ int get_fullscreen(Display *dpy) {
     }
   }
 
-  if(atoms != NULL)
+  if(atoms)
     safefree((void **)&atoms);
 
   return retval;
